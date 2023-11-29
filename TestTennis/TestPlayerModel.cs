@@ -1,4 +1,5 @@
-﻿using Tennis.Models;
+﻿using Tennis.Models.Views;
+using Tennis.Models;
 
 namespace TestTennis
 {
@@ -103,6 +104,22 @@ namespace TestTennis
             };
 
             return playerList;
+        }
+
+        internal static GlobalStat GenerateFakeGlobalStat()
+        {
+            GlobalStat globalStat = new GlobalStat
+            {
+                BestRatioCountry = new PlayerCountry
+                {
+                    Picture = "https://en.wikipedia.org/wiki/England#/media/File:Flag_of_England.svg",
+                    Code = "GBR"
+                },
+                AverageBMI = 24.151660927841f,
+                MedianHeight = 170
+            };
+
+            return globalStat;
         }
     }
 }
