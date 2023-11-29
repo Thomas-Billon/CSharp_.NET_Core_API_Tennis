@@ -7,7 +7,7 @@
         public string LastName { get; set; } = string.Empty;
         public string ShortName { get; set; } = string.Empty;
         public string Sex { get; set; } = string.Empty;
-        public Country Country { get; set; } = null!;
+        public PlayerCountry Country { get; set; } = null!;
         public string Picture { get; set; } = string.Empty;
         public PlayerData Data { get; set; } = null!;
     }
