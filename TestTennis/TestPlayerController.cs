@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Tennis.Controllers;
 using Tennis.Models;
@@ -28,13 +29,16 @@ namespace TestTennis
             PlayerController playerController = new PlayerController(_playerService.Object);
 
             // Act
-            var playerResult = playerController.GetPlayerList();
+            var actionResult = playerController.GetPlayerList();
 
             // Assert
-            Assert.NotNull(playerResult);
-            Assert.NotEmpty(playerResult);
-            Assert.Equal(playerList.Count, playerResult.Count());
-            Assert.Equal(playerList, playerResult);
+            var result = actionResult.Result as OkObjectResult;
+            Assert.NotNull(result);
+            var actual = result.Value as IEnumerable<Player>;
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual);
+            Assert.Equal(playerList.Count, actual.Count());
+            Assert.Equal(playerList, actual);
         }
 
         [Fact]
@@ -52,17 +56,21 @@ namespace TestTennis
             PlayerController playerController = new PlayerController(_playerService.Object);
 
             // Act
-            var playerResult = playerController.GetPlayerListByRank();
+            var actionResult = playerController.GetPlayerListByRank();
 
             // Assert
-            Assert.NotNull(playerResult);
-            Assert.NotEmpty(playerResult);
-            Assert.Equal(playerList.Count, playerResult.Count());
-            Assert.Equal(playerList, playerResult);
+            var result = actionResult.Result as OkObjectResult;
+            Assert.NotNull(result);
+            var actual = result.Value as IEnumerable<Player>;
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual);
+            Assert.Equal(playerList.Count, actual.Count());
+            Assert.Equal(playerList, actual);
 
-            for (int i = 0; i < playerList.Count - 1; i++)
+            List<Player> actualList = actual.ToList();
+            for (int i = 0; i < actualList.Count - 1; i++)
             {
-                Assert.True(playerList[i].Data.Rank < playerList[i + 1].Data.Rank);
+                Assert.True(actualList[i].Data.Rank < actualList[i + 1].Data.Rank);
             }
         }
 
@@ -79,12 +87,15 @@ namespace TestTennis
             PlayerController playerController = new PlayerController(_playerService.Object);
 
             // Act
-            var playerResult = playerController.GetPlayerById(10);
+            var actionResult = playerController.GetPlayerById(10);
 
             // Assert
-            Assert.NotNull(playerResult);
-            Assert.Equal(playerList[3], playerResult);
-            Assert.True(playerList[3].Id == playerResult.Id);
+            var result = actionResult.Result as OkObjectResult;
+            Assert.NotNull(result);
+            var actual = result.Value as Player;
+            Assert.NotNull(actual);
+            Assert.Equal(playerList[3], actual);
+            Assert.True(playerList[3].Id == actual.Id);
         }
 
         [Fact]
@@ -100,13 +111,16 @@ namespace TestTennis
             PlayerController playerController = new PlayerController(_playerService.Object);
 
             // Act
-            var globalStatResult = playerController.GetPlayerGlobalStat();
+            var actionResult = playerController.GetPlayerGlobalStat();
 
             // Assert
-            Assert.NotNull(globalStatResult);
-            Assert.True(globalStat.BestRatioCountry.Code == globalStatResult.BestRatioCountry.Code);
-            Assert.True(globalStat.AverageBMI == globalStatResult.AverageBMI);
-            Assert.True(globalStat.MedianHeight == globalStatResult.MedianHeight);
+            var result = actionResult.Result as OkObjectResult;
+            Assert.NotNull(result);
+            var actual = result.Value as GlobalStat;
+            Assert.NotNull(actual);
+            Assert.True(globalStat.BestRatioCountry.Code == actual.BestRatioCountry.Code);
+            Assert.True(globalStat.AverageBMI == actual.AverageBMI);
+            Assert.True(globalStat.MedianHeight == actual.MedianHeight);
         }
     }
 }

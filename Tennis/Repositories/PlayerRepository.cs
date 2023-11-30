@@ -17,18 +17,33 @@ namespace Tennis.Repositories
 
         public IEnumerable<Player> List()
         {
-            PlayerList playerList = _jsonReader.Read<PlayerList>(_configuration["Data:FilePath"]);
+            PlayerList? playerList = _jsonReader.Read<PlayerList>(_configuration["Data:FilePath"]);
 
             if (playerList == null)
             {
                 return new List<Player>();
             }
+
             return playerList.Players;
         }
 
         public Player Get(int id)
         {
-            throw new NotImplementedException();
+            PlayerList? playerList = _jsonReader.Read<PlayerList>(_configuration["Data:FilePath"]);
+
+            if (playerList == null || playerList.Players == null)
+            {
+                throw new ArgumentException($"Error: Id {id} not found");
+            }
+
+            Player? player = playerList.Players.FirstOrDefault(p => p.Id == id);
+
+            if (player == null)
+            {
+                throw new ArgumentException($"Error: Id {id} not found");
+            }
+
+            return player;
         }
 
         public bool Create(Player item)

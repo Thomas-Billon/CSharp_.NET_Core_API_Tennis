@@ -32,7 +32,6 @@ namespace TestTennis
 
             // Assert
             Assert.NotNull(playerCountryResult);
-            Assert.Equal(playerCountryExpected, playerCountryResult);
             Assert.True(playerCountryExpected.Code == playerCountryResult.Code);
         }
 

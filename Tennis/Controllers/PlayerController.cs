@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Numerics;
+using System.Text.Json;
 using Tennis.Models;
 using Tennis.Models.Views;
 using Tennis.Services;
@@ -6,7 +9,7 @@ using Tennis.Services;
 namespace Tennis.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class PlayerController : ControllerBase
     {
         private readonly IPlayerService _playerService;
@@ -17,36 +20,91 @@ namespace Tennis.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Player> GetPlayerList()
+        [Produces(typeof(IEnumerable<Player>))]
+        public ActionResult<IEnumerable<Player>> GetPlayerList()
         {
-            return _playerService.GetPlayerList();
+            try
+            {
+                IEnumerable<Player> playerList = _playerService.GetPlayerList();
+
+                return Ok(playerList);
+            }
+            catch (JsonException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        // TODO: Créer un endpoint qui retourne les joueurs. La liste doit être triée du meilleur au moins bon.
-        // => [HttpGet] Returns a IEnumerable<Player> ordered by Data.Rank (& then by Data.Points?)
         [HttpGet]
-        public IEnumerable<Player> GetPlayerListByRank()
+        [Produces(typeof(IEnumerable<Player>))]
+        public ActionResult<IEnumerable<Player>> GetPlayerListByRank()
         {
-            return _playerService.GetPlayerListByRank();
+            try
+            {
+                IEnumerable<Player> playerList = _playerService.GetPlayerListByRank();
+
+                return Ok(playerList);
+            }
+            catch (JsonException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        // TODO: Créer un endpoint qui permet de retourner les informations d’un joueur grâce à son ID.
-        // => [HttpGet] Returns a Player based on Id
         [HttpGet]
-        public Player GetPlayerById(int id)
+        [Produces(typeof(Player))]
+        public ActionResult<Player> GetPlayerById(int id)
         {
-            return _playerService.GetPlayerById(id);
+            try
+            {
+                Player player = _playerService.GetPlayerById(id);
+
+                return Ok(player);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(422, ex.Message);
+            }
+            catch (JsonException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        // TODO: Créer un endpoint qui retourne les statistiques suivantes :
-        // - Pays qui a le plus grand ratio de parties gagnées
-        // - IMC moyen de tous les joueurs
-        // - La médiane de la taille des joueurs
-        // => [HttpGet] Returns a custom view model with all stuff calculated above
         [HttpGet]
-        public GlobalStat GetPlayerGlobalStat()
+        [Produces(typeof(GlobalStat))]
+        public ActionResult<GlobalStat> GetPlayerGlobalStat()
         {
-            return _playerService.GetPlayerGlobalStat();
+            try
+            {
+                GlobalStat globalStat = _playerService.GetPlayerGlobalStat();
+
+                return Ok(globalStat);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (JsonException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

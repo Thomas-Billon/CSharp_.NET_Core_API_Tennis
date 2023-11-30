@@ -2,6 +2,6 @@
 {
     public interface IJsonReader
     {
-        public T Read<T>(string filePath) where T : new();
+        public T? Read<T>(string filePath);
     }
 }
