@@ -17,4 +17,8 @@ In the development environment, Swagger UI will display the 4 different endpoint
 
 The player list is available / editable as a JSON file in **Data/headtohead.json**
 
+### Where can I find this online?
+
+This API is available at https://tennisappservice.azurewebsites.net/ with the same endpoints as above
+
 Have fun!
