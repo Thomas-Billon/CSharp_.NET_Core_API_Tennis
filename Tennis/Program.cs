@@ -1,4 +1,5 @@
-﻿using Tennis.Data;
+﻿using Microsoft.OpenApi.Models;
+using Tennis.Data;
 using Tennis.Repositories;
 using Tennis.Services;
 
@@ -9,7 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setup =>
+{
+    setup.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Tenisu",
+        Version = "v1"
+    });
+});
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
@@ -18,10 +26,11 @@ builder.Services.AddTransient<IJsonReader, JsonReader>();
 
 var app = builder.Build();
 
+app.UseSwagger();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
 }
 
