@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
-using Tennis.Data;
 using Tennis.Repositories;
 using Tennis.Services;
+using Tennis.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 

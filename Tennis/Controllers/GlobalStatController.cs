@@ -8,28 +8,28 @@ namespace Tennis.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PlayerController : ControllerBase
+    public class GlobalStatController : ControllerBase
     {
         private readonly IPlayerService _playerService;
 
-        public PlayerController(IPlayerService playerService)
+        public GlobalStatController(IPlayerService playerService)
         {
             _playerService = playerService;
         }
 
         [HttpGet]
-        [Produces(typeof(Player))]
-        public ActionResult<Player> GetPlayerById(int id)
+        [Produces(typeof(GlobalStat))]
+        public ActionResult<GlobalStat> GetPlayerGlobalStat()
         {
             try
             {
-                Player player = _playerService.GetPlayerById(id);
+                GlobalStat globalStat = _playerService.GetPlayerGlobalStat();
 
-                return Ok(player);
+                return Ok(globalStat);
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(404, ex.Message);
+                return StatusCode(500, ex.Message);
             }
             catch (JsonException ex)
             {

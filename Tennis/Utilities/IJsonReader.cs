@@ -1,4 +1,4 @@
-﻿namespace Tennis.Data
+﻿namespace Tennis.Utilities
 {
     public interface IJsonReader
     {

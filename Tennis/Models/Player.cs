@@ -14,6 +14,6 @@
 
     public class PlayerList
     {
-        public List<Player> Players { get; set; } = new List<Player>();
+        public ICollection<Player> Players { get; set; } = new List<Player>();
     }
 }

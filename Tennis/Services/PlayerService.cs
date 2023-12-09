@@ -16,12 +16,33 @@ namespace Tennis.Services
 
         public IEnumerable<Player> GetPlayerList()
         {
-            return _playerRepository.List();
+            return _playerRepository.GetAll();
         }
 
-        public IEnumerable<Player> GetPlayerListByRank()
+        public IEnumerable<Player> GetPlayerListByRank(string? order)
         {
-            return _playerRepository.List().OrderBy(p => p.Data.Rank);
+            switch (order)
+            {
+                case "asc":
+                    return GetPlayerListByRankAsc();
+
+                case "desc":
+                    return GetPlayerListByRankDesc();
+
+                default:
+                    // Just return 
+                    return GetPlayerListByRankAsc();
+            }
+        }
+
+        public IEnumerable<Player> GetPlayerListByRankAsc()
+        {
+            return _playerRepository.GetAll().OrderBy(p => p.Data.Rank);
+        }
+
+        public IEnumerable<Player> GetPlayerListByRankDesc()
+        {
+            return _playerRepository.GetAll().OrderByDescending(p => p.Data.Rank);
         }
 
         public Player GetPlayerById(int id)
@@ -31,7 +52,8 @@ namespace Tennis.Services
 
         public GlobalStat GetPlayerGlobalStat()
         {
-            List<Player> playerList = _playerRepository.List().ToList();
+            // Better to use list since we are going to iterate through it multiple times
+            List<Player> playerList = _playerRepository.GetAll().ToList();
 
             return new GlobalStat
             {
@@ -101,26 +123,30 @@ namespace Tennis.Services
                 totalBMI += weightKG / (heightM * heightM);
             }
 
-            return totalBMI / playerList.Count();
+            return totalBMI / playerList.Count;
         }
 
         public float CalculateMedianHeight(List<Player> playerList)
         {
-            if (playerList.Count == 0)
+            if (playerList.Count() == 0)
             {
                 throw new InvalidOperationException("Error: Cannot calculate global stats as player list is empty");
             }
 
+            // Better than using OrderBy() & ToList()
+            List<Player> orderedList = playerList;
+            orderedList.Sort((x, y) => x.Data.Height.CompareTo(y.Data.Height));
+
             // Odd median
-            if (playerList.Count % 2 == 1)
+            if (orderedList.Count % 2 == 1)
             {
-                return playerList[playerList.Count / 2].Data.Height;
+                return orderedList[orderedList.Count / 2].Data.Height;
             }
             // Even median
             else
             {
-                float playerHeight1 = playerList[playerList.Count / 2 - 1].Data.Height;
-                float playerHeight2 = playerList[playerList.Count / 2].Data.Height;
+                float playerHeight1 = orderedList[orderedList.Count / 2 - 1].Data.Height;
+                float playerHeight2 = orderedList[orderedList.Count / 2].Data.Height;
 
                 return (playerHeight1 + playerHeight2) / 2;
             }

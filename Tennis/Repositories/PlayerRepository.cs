@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Tennis.Data;
 using Tennis.Models;
+using Tennis.Utilities;
 
 namespace Tennis.Repositories
 {
@@ -15,7 +15,7 @@ namespace Tennis.Repositories
             _jsonReader = jsonReader;
         }
 
-        public IEnumerable<Player> List()
+        public IEnumerable<Player> GetAll()
         {
             PlayerList? playerList = _jsonReader.Read<PlayerList>(_configuration["Data:FilePath"]);
 
@@ -31,9 +31,9 @@ namespace Tennis.Repositories
         {
             PlayerList? playerList = _jsonReader.Read<PlayerList>(_configuration["Data:FilePath"]);
 
-            if (playerList == null || playerList.Players == null)
+            if (playerList == null || playerList.Players == null || playerList.Players.Count == 0)
             {
-                throw new ArgumentException($"Error: Id {id} not found");
+                throw new ArgumentException($"Error: Player list is empty");
             }
 
             Player? player = playerList.Players.FirstOrDefault(p => p.Id == id);
@@ -51,7 +51,7 @@ namespace Tennis.Repositories
             throw new NotImplementedException();
         }
 
-        public bool Edit(Player item)
+        public bool Update(Player item)
         {
             throw new NotImplementedException();
         }
@@ -61,7 +61,7 @@ namespace Tennis.Repositories
             throw new NotImplementedException();
         }
 
-        public bool SaveChanges()
+        public bool Save()
         {
             throw new NotImplementedException();
         }

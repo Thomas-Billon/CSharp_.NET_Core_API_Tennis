@@ -3,7 +3,7 @@ using Tennis.Models;
 
 namespace TestTennis
 {
-    public class TestPlayerModel
+    public class DataSource
     {
         internal static List<Player> GenerateFakePlayerList()
         {

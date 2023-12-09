@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
-using Tennis.Utilities;
 
-namespace Tennis.Data
+namespace Tennis.Utilities
 {
     public class JsonReader : IJsonReader
     {
